@@ -34,26 +34,75 @@ This file contains a number of front-end interview questions that can be used wh
 
 **Talk about your preferred development environment.**
 
+Mac OS X (or Ubuntu), Webstorm, zsh, Chrome, dev tools, git, node
+
 **Which version control systems are you familiar with?**
+
+Git, Mercurial, SVN
 
 **Can you describe your workflow when you create a web page?**
 
+1. study prototype
+1. set structures(html tag)
+1. render with style
+1. add interactive by scripts
+
 **If you have 5 different stylesheets, how would you best integrate them into the site?**
+
+I'd combine them in one style file and minify.
 
 **Can you describe the difference between progressive enhancement and graceful degradation?**
 
+1. *Graceful degradation*. Providing an alternative version of your functionality or making the user aware of shortcomings of a product as a safety measure to ensure that the product is usable.
+
+1. *Progressive enhancement*. Starting with a baseline of usable functionality, then increasing the richness of the user experience step by step by testing for support for enhancements before applying them.
+
+I agree with progressive enhancement, and increasing user experience with feature detection. For example, once I detected that the browser support round-corner or shadow text, I will apply this features to pages.
+
 **How would you optimize a website's assets/resources?**
+
+1. File concatenation
+1. File minification
+1. CDN Hosted
+1. Caching
+Combine and minify all js files in one file. Do the same for styles. Combine images in sprites
 
 **How many resources will a browser download from a given domain at a time?**
   * What are the exceptions?
 
+Multiple domains could increase the number of parallel downloads that the browser can perform.
+
+About 4 to 6 connections per domain
+
+Not all browsers are restricted to just two parallel downloads per hostname. Opera 9+ and Safari 3+ do four downloads per hostname. Internet Explorer 8, Firefox 3, and Chrome 1+ do six downloads per hostname. Sharding across two domains is a good compromise that improves performance in all browsers.
+
+The optimal number of domains to shard across is 2-4. After 4 domains, response time degrades.
+
 **Name 3 ways to decrease page load (perceived or actual load time).**
+
+1. Reduce the number of requests
+1. Minimize HTTP Requests
+1. optimize images
+1. minify css&js file
+1. compress(gzip)
+1. yahoo 14 rules
+
+Combine and minify all js files in one file. Do the same for styles. Combine images in sprites. Move including JS to the end of <body> tag.
 
 **If you jumped on a project and they used tabs and you used spaces, what would you do?**
 
+1. Suggest the project utilize something like EditorConfig (http://editorconfig.org)
+1. Conform to the conventions (stay consistent)
+
+I will setup my environment for using tabs because it's important to have the same settings for it in the team.
+
 **Describe how you would create a simple slideshow page.**
 
+I would create several blocks - left arrow, middle blocks for slides and right arrow. Then I would add click listeners on the arrows to decrease or increase the number of current slide and show html bolck with current slide number.
+
 **If you could master one technology this year, what would it be?**
+
+Ruby On Rails. For a good job.
 
 **Explain the importance of standards and standards bodies.**
 
@@ -61,7 +110,11 @@ This file contains a number of front-end interview questions that can be used wh
 
 **Explain what ARIA and screenreaders are, and how to make a website accessible.**
 
+We should add aria-attributes in out html to help screenreaders detect what part of site or what element is it.
+
 **Explain some of the pros and cons for CSS animations versus JavaScript animations.**
+
+CSS animations faster but less controled.
 
 **What does CORS stand for and what issue does it address?**
 
@@ -69,7 +122,11 @@ This file contains a number of front-end interview questions that can be used wh
 
 **What does a `doctype` do?**
 
+Instruct the browser to render the page.
+
 **What's the difference between standards mode and quirks mode?**
+
+Obviously,the css box model.
 
 **What's the difference between HTML and XHTML?**
 
@@ -77,21 +134,61 @@ This file contains a number of front-end interview questions that can be used wh
 
 **How do you serve a page with content in multiple languages?**
 
+Use i18n framework.
+
 **What kind of things must you be wary of when design or developing for multilingual sites?**
 
 **What are `data-` attributes good for?**
 
+The W3C specification for data-attributes states that:
+
+Custom data attributes are intended to store custom data private to the page or application, for which there are no more appropriate attributes or elements.
+Custom data- attributes are a great way to simplify the storage of application data in your web pages.
+
 **Consider HTML5 as an open web platform. What are the building blocks of HTML5?**
 
+1. more semantic text markup
+1. new form elements
+1. video and audio
+1. new javascript API
+1. canvas and SVG
+1. new communication API
+1. geolocation API
+1. web worker API
+1. new data storage
+
 **Describe the difference between a `cookie`, `sessionStorage` and `localStorage`.**
+
+Now there are such way to keep data on front-end side.
+
+1. HTML5 local Storage
+1. HTML5 session storage
+1. HTML5 web database
+1. Cookies
+2. 
+localStorage - stores data with no expiration date sessionStorage - stores data for one session
+
+HTML5 web storage = generic umbrella term for the new client-side data storage options:
+
+1. Web Storage is more secure and faster. The data is not included with every server request, but used ONLY when asked for. It is also possible to store large amounts of data, without affecting the website's performance.
+1. Local Storage = persistant and scoped to the domain(store data with no expiration date). At the moment two flavors are usually mentioned:
+'default' = stores things in name/value pairs
+Web SQL (aka Web Database) = uses a SQL database
+1. Session Storage = non persistent and scoped only to the current window(stores data for one session)
+
+Cookies = the old school way of doing all of the above. Stores name/value pairs per domain.
 
 **Describe the difference between `<script>`, `<script async>` and `<script defer>`.**
 
 **Why is it generally a good idea to position CSS `<link>`s between `<head></head>` and JS `<script>`s just before `</body>`? Do you know any exceptions?**
 
+It's a good idea because when we put our js script tag to the end of <body> tag, browser dont't wait while js file will be loaded. Browser can render page without it. But we should place <link> tag inside <head> because in this case browser will not be render page before styles will be full loaded.
+
 **What is progressive rendering?**
 
 **Have you used different HTML templating languages before?**
+
+Slim, Skim, PHP templating.
 
 #### CSS Questions:
 
@@ -99,7 +196,22 @@ This file contains a number of front-end interview questions that can be used wh
 
 **What's the difference between "resetting" and "normalizing" CSS? Which would you choose, and why?**
 
+1. *What Is A CSS Reset?*.
+A CSS Reset (or “Reset CSS”) is a short, often compressed (minified) set of CSS rules that resets the styling of all HTML elements to a consistent baseline. In a word,reset.css is used to normalize browser's default styles.
+Why USE A CSS Reset? 
+Browser have different "built-in" styles which they apply to different html-elements. These styledefinitions may vary accross different browsers.
+Which CSS Reset Should I Use?
+
+1. *Normalize.css* is a customisable CSS file that makes browsers render all elements more consistently and in line with modern standards.
+If you’re working with HTML5, use the HTML5 Doctor Reset CSS
+If you’re doing some quick prototyping and testing, or building a non-HTML5 page, use Eric Meyer’s Reset CSS.
+If you want a CSS Reset that acts more as a framework, un-resetting styles after the CSS Reset, use the Tripoli CSS Reset or the Vanilla CSS Un-Reset
+If you want a full-featured CSS Framework, try using and abusing all the modules of the YUI 3 CSS Library
+Generally speaking, don’t use the Universal Selector ‘*’ CSS Reset
+
 **Describe Floats and how they work.**
+
+A float element in page like a boat in water.
 
 **Describe z-index and how stacking context is formed.**
 
@@ -107,7 +219,27 @@ This file contains a number of front-end interview questions that can be used wh
 
 **What are the various clearing techniques and which is appropriate for what context?**
 
+1. *The Empty Div Method* is, quite literally, an empty div. <div style="clear: both;"></div>. Sometimes you'll see a <br /> element or some other random element used, but div is the most common because it has no brower default styling, doesn't have any special function, and is unlikely to be generically styled with CSS. This method is scorned by semantic purists since its presence has no contexual meaning at all to the page and is there purely for presentation. Of course in the strictest sense they are right, but it gets the job done right and doesn't hurt anybody.
+1. *The Overflow Method* relies on setting the overflow CSS property on a parent element. If this property is set to auto or hidden on the parent element, the parent will expand to contain the floats, effectively clearing it for succeeding elements. This method can be beautifully semantic as it may not require an additional elements. However if you find yourself adding a new div just to apply this, it is equally as unsemantic as the empty div method and less adaptable. Also bear in mind that the overflow property isn't specifically for clearing floats. Be careful not to hide content or trigger unwanted scrollbars.
+1. *The Easy Clearing Method* uses a clever CSS pseudo selector (:after) to clear floats. Rather than setting the overflow on the parent, you apply an additional class like "clearfix" to it. Then apply this CSS:
+
+```css
+    .clearfix:after {       
+        content: ".";       
+        visibility: hidden;       
+        display: block;       
+        height: 0;       
+        clear: both;
+    }
+```
+
+This will apply a small bit of content, hidden from view, after the parent element which clears the float. This isn't quite the [whole story](http://www.positioniseverything.net/easyclearing.html), as additional code needs to be used to accomodate for older browsers.
+
 **Explain CSS sprites, and how you would implement them on a page or site.**
+
+CSS sprites are a way to reduce the number of HTTP requests made for image resources referenced by your site. Images are combined into one larger image at defined X and Y coorindates. Having assigned this generated image to relevant page elements the background-position CSS property can then be used to shift the visible area to the required component image.(Css sprites is a technology to combin many image into one, and use css background-position to find which part you want)
+
+CSS Sprites are the preferred method for reducing the number of image requests. Combine your background images into a single image and use the CSS background-image and background-position properties to display the desired image segment.
 
 **What are your favourite image replacement techniques and which do you use when?**
 
@@ -116,28 +248,75 @@ This file contains a number of front-end interview questions that can be used wh
 **How do you serve your pages for feature-constrained browsers?**
   * What techniques/processes do you use?
 
+1. Progressive Enhancement
+1. Graceful Degradation
+
 **What are the different ways to visually hide content (and make it available only for screen readers)?**
 
+css media types (http://www.w3.org/TR/CSS2/media.html)
+
 **Have you ever used a grid system, and if so, what do you prefer?**
+
+Of course yes.
+
+1. Bootstrap Grid System
+1. Grid960
 
 **Have you used or implemented media queries or mobile specific layouts/CSS?**
 
 **Are you familiar with styling SVG?**
 
+http://www.w3.org/TR/SVG/styling.html
+
 **How do you optimize your webpages for print?**
 
+1. Create A Stylesheet For Print
+1. Avoid Unnecessary HTML Tables
+1. Hiding Needless Element For Print
+1. Size Page For Print
+1. Use Page Break
+
 **What are some of the "gotchas" for writing efficient CSS?**
+
+1. Use efficient CSS selectors
+  1. Avoid a universal key selector.
+  1. Allow elements to inherit from ancestors, or use a class to apply a style to multiple elements.
+  1. Make your rules as specific as possible. 
+  1. Prefer class and ID selectors over tag selectors.
+  1. Remove redundant qualifiers. 
+  1. These qualifiers are redundant:
+    * ID selectors qualified by class and/or tag selectors
+    * Class selectors qualified by tag selectors (when a class is only used for one tag, which is a good design practice anyway).
+  1. Avoid using descendant selectors, especially those that specify redundant ancestors. For example, the rule body ul li a {...} specifies a redundant body selector, since all elements are descendants of the body tag.
+  1. Use class selectors instead of descendant selectors.
+1. Avoid CSS expressions
+1. Put CSS in the document head
 
 **What are the advantages/disadvantages of using CSS preprocessors?**
   * Describe what you like and dislike about the CSS preprocessors you have used.
 
 **How would you implement a web design comp that uses non-standard fonts?**
 
+Webfonts (font services like: Google Webfonts, Typekit etc.)  
+
 **Explain how a browser determines what elements match a CSS selector.**
+
+As the browser parses HTML, it constructs an internal document tree representing all the elements to be displayed. It then matches elements to styles specified in various stylesheets, according to the standard CSS cascade, inheritance, and ordering rules. In Mozilla's implementation (and probably others as well), for each element, the CSS engine searches through style rules to find a match. The engine evaluates each rule from right to left, starting from the rightmost selector (called the "key") and moving through each selector until it finds a match or discards the rule. (The "selector" is the document element to which the rule should apply.)
 
 **Describe pseudo-elements and discuss what they are used for.**
 
 **Explain your understanding of the box model and how you would tell the browser in CSS to render your layout in different box models.**
+
+All HTML elements can be considered as boxes. In CSS, the term "box model" is used when talking about design and layout.
+
+The CSS box model is essentially a box that wraps around HTML elements, and it consists of: margins, borders, padding, and the actual content.
+
+*Important*: When you set the width and height properties of an element with CSS, you just set the width and height of the *content area*. To calculate the full size of an element, you must also add the padding, borders and margins.
+
+IE8 and earlier versions of IE, included padding and border in the width property.
+To fix this problem, add a <!DOCTYPE html> to the HTML page.
+
+The box-sizing CSS property is used to alter the default CSS box model used to calculate widths and heights of elements. It is possible to use this property to emulate the behavior of browsers that do not correctly support the CSS box model specification.
 
 **What does ```* { box-sizing: border-box; }``` do? What are its advantages?**
 
