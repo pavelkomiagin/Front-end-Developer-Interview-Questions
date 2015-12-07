@@ -100,69 +100,201 @@ This file contains a number of front-end interview questions that can be used wh
 
 #### JS Questions:
 
-* Explain event delegation
-* Explain how `this` works in JavaScript
-* Explain how prototypal inheritance works
-* What do you think of AMD vs CommonJS?
-* Explain why the following doesn't work as an IIFE: `function foo(){ }();`.
+**Explain event delegation**
+
+Event delegation allows us to attach a single event listener, to a parent element, that will fire for all children matching a selector, whether those children exist now or are added in the future.the underlying cause is browser's event bubbling.
+
+**Explain how `this` works in JavaScript**
+
+The this object is bound at runtime based on the context in which a function is executed:
+
+1. when used inside global functions,this is equal to window in nostrict mode and undefined in strict mode.
+1. whereas this is equal to the object when called as an object method.
+1. as a constructor
+1. call and apply
+1. bound functions
+1. as dom event handler
+
+**Explain how prototypal inheritance works**
+
+Whenever a function is created, its prototype property is also created according to a specific set of rules. 
+When it comes to inheritance, JavaScript only has one construct: objects. Each object has an internal link to another object called its prototype. That prototype object has a prototype of its own, and so on until an object is reached with null as its prototype. null, by definition, has no prototype, and acts as the final link in this prototype chain.
+
+**What do you think of AMD vs CommonJS?**
+
+**Explain why the following doesn't work as an IIFE: `function foo(){ }();`.**
   * What needs to be changed to properly make it an IIFE?
-* What's the difference between a variable that is: `null`, `undefined` or undeclared?
+
+The most widely accepted way to tell the parser to expect a function expression is just to wrap in in parens, because in JavaScript, parens can’t contain statements. At this point, when the parser encounters the function keyword, it knows to parse it as a function expression and not a function declaration.
+
+**What's the difference between a variable that is: `null`, `undefined` or undeclared?**
   * How would you go about checking for any of these states?
-* What is a closure, and how/why would you use one?
-* What's a typical use case for anonymous functions?
-* How do you organize your code? (module pattern, classical inheritance?)
-* What's the difference between host objects and native objects?
-* Difference between: `function Person(){}`, `var person = Person()`, and `var person = new Person()`?
-* What's the difference between `.call` and `.apply`?
-* Explain `Function.prototype.bind`.
-* When would you use `document.write()`?
-* What's the difference between feature detection, feature inference, and using the UA string?
-* Explain AJAX in as much detail as possible.
-* Explain how JSONP works (and how it's not really AJAX).
-* Have you ever used JavaScript templating?
+
+The undefined variable is a declared but has a value of undefined. To use a undeclared variable will cause an error.
+
+**What is a closure, and how/why would you use one?**
+
+Closures are functions that have access to variables from anthor function's scope. This is often accomplished by creating a function inside a function.
+
+**What's a typical use case for anonymous functions?**
+
+event handler
+IIFE
+
+**How do you organize your code? (module pattern, classical inheritance?)**
+
+The module pattern use an anonymous function that returns a object. 
+Inside of the anonymous function, the private variables and functions are defined first.
+After that, an object literal is returned as the function value. That object literal contains only properties and methods that should be public. Since the object is defined inside the anonymous function, all of the public methods have access to the private variables and functions.
+
+**What's the difference between host objects and native objects?**
+
+1. Native objects are those objects supplied by JavaScript. Examples of these are String, Number, Array, Image, Date, Math, etc.
+2. Host objects are objects that are supplied to JavaScript by the browser environment. Examples of these are window, document, forms, etc.
+
+**Difference between: `function Person(){}`, `var person = Person()`, and `var person = new Person()`?**
+
+**What's the difference between `.call` and `.apply`?**
+
+These methods both call the function with a specific this value. The *apply()* method accepts two arguments: the value of this and an array of arguments. The *call()* method has the same behavior as apply(), but arguments are passed to it differently. Using call() arguments must be enumerated specifically.
+
+**Explain `Function.prototype.bind`.**
+
+ECMAScript 5 defines an addition method called 'bind()'. The 'bind()' method create a new function instance whose this value is bound to the value to that was passed into 'bind()'.
+
+**When would you use `document.write()`?**
+
+**What's the difference between feature detection, feature inference, and using the UA string?**
+
+Feature Detection is to identify the browser's capabilities.
+Feature Inference is guess whether browser has certain feature through others feature or UA string.
+One inappropriate use of feature detection is called feature inference. Feature inference attempts to use multiple features after validating the presence of only one. The presence of one feature is inferred by the presence of another. The problem is, of course, that inference is an assumption rather than a fact, and that can lead to maintenance issues.
+UA String is User-Agent Detection.
+
+**Explain AJAX in as much detail as possible.**
+
+AJAX is short for Asynchronous Javascript + XML. The technique consisted of making server requests for additional data without reloading web page, as a result we have a better user experience.
+
+**Explain how JSONP works (and how it's not really AJAX).**
+
+**Have you ever used JavaScript templating?**
   * If so, what libraries have you used?
-* Explain "hoisting".
-* Describe event bubbling.
-* What's the difference between an "attribute" and a "property"?
-* Why is extending built-in JavaScript objects not a good idea?
-* Difference between document load event and document ready event?
-* What is the difference between `==` and `===`?
-* Explain the same-origin policy with regards to JavaScript.
-* Make this work:
+
+Handlebars, _.tmpl, $.tmpl, skim
+
+**Explain "hoisting".**
+
+There is a preproccess or precompile in javascript runtime. and 'Hoisting' occur in the preproccess.
+
+Function declarations and variable declarations are always moved (“hoisted”) invisibly to the top of their containing scope by the JavaScript interpreter. This means that code like this:
+
+```javascript
+function foo() {
+    bar();
+    var x = 1;
+}
+```
+
+is actually interpreted like this:
+
+```javascript
+function foo() {
+    var x;
+    bar();
+    x = 1;
+}
+```
+
+**Describe event bubbling.**
+
+1. Event Flow describes the order in which events are received on the page. An event has three phases of its life cycle: capture, target, and bubbling.
+2. Event Bubbling mean that an event start at the most specific element (the deepest possible point to the document tree) and then flow upward toward the least specific node (the document);
+
+**What's the difference between an "attribute" and a "property"?**
+
+Often an attribute is used to describe the mechanism or real-world thing.
+
+A property is used to describe the model.
+
+In HTML / Javascript the terms get confused because DOM Elements have attributes (per the HTML source) which are backed by properties when those elements are represented as Javascript objects.
+
+To further confuse things, changes to the properties can sometimes update the attributes.
+
+For example, changing the element.href property will update the href attribute on the element, and that'll be reflected in a call to element.getAttribute('href').
+
+However if you subsequently read that property, it will have been normalised to an absolute URL, even though the attribute might be a relative URL!
+
+**Why is extending built-in JavaScript objects not a good idea?**
+
+Depend on the way of extending.
+
+**Difference between document load event and document ready event?**
+
+1. ready means DOM is ready.
+1. load means the page fully loaded. Includes inner frames, images etc.
+
+**What is the difference between `==` and `===`?**
+
+The == operator will compare for equality after doing any necessary type conversions. The === operator will not do the conversion, so if two values are not the same type === will simply return false. It's this case where === will be faster, and may return a different result than ==. In all other cases performance will be the same.
+
+**Explain the same-origin policy with regards to JavaScript.**
+
+**Make this work:**
 ```javascript
 duplicate([1,2,3,4,5]); // [1,2,3,4,5,1,2,3,4,5]
+function duplicate(collection) {
+  return collection.concat(collection);
+}
 ```
-* Why is it called a Ternary expression, what does the word "Ternary" indicate?
-* What is `"use strict";`? what are the advantages and disadvantages to using it?
-* Create a for loop that iterates up to `100` while outputting **"fizz"** at multiples of `3`, **"buzz"** at multiples of `5` and **"fizzbuzz"** at multiples of `3` and `5`
-* Why is it, in general, a good idea to leave the global scope of a website as-is and never touch it?
-* Why would you use something like the `load` event? Does this event have disadvantages? Do you know any alternatives, and why would you use those?
-* Explain what a single page app is and how to make one SEO-friendly.
-* What is the extent of your experience with Promises and/or their polyfills?
-* What are the pros and cons of using Promises instead of callbacks?
-* What are some of the advantages/disadvantages of writing JavaScript code in a language that compiles to JavaScript?
-* What tools and techniques do you use debugging JavaScript code?
-* What language constructions do you use for iterating over object properties and array items?
-* Explain the difference between mutable and immutable objects.
+
+**Why is it called a Ternary expression, what does the word "Ternary" indicate?**
+
+**What is `"use strict";`? what are the advantages and disadvantages to using it?**
+
+**Create a for loop that iterates up to `100` while outputting "fizz" at multiples of `3`, "buzz" at multiples of `5` and "fizzbuzz" at multiples of `3` and `5`**
+
+**Why is it, in general, a good idea to leave the global scope of a website as-is and never touch it?**
+
+**Why would you use something like the `load` event? Does this event have disadvantages? Do you know any alternatives, and why would you use those?**
+
+**Explain what a single page app is and how to make one SEO-friendly.**
+
+**What is the extent of your experience with Promises and/or their polyfills?**
+
+**What are the pros and cons of using Promises instead of callbacks?**
+
+**What are some of the advantages/disadvantages of writing JavaScript code in a language that compiles to JavaScript?**
+
+**What tools and techniques do you use debugging JavaScript code?**
+
+**What language constructions do you use for iterating over object properties and array items?**
+
+**Explain the difference between mutable and immutable objects.**
   * What is an example of an immutable object in JavaScript?
   * What are the pros and cons of immutability?
   * How can you achieve immutability in your own code?
-* Explain the difference between synchronous and asynchronous functions.
-* What is event loop?
+**Explain the difference between synchronous and asynchronous functions.**
+
+**What is event loop?**
   * What is the difference between call stack and task queue?
 
 #### Testing Questions:
 
-* What are some advantages/disadvantages to testing your code?
-* What tools would you use to test your code's functionality?
-* What is the difference between a unit test and a functional/integration test?
-* What is the purpose of a code style linting tool?
+**What are some advantages/disadvantages to testing your code?**
+
+**What tools would you use to test your code's functionality?**
+
+**What is the difference between a unit test and a functional/integration test?**
+
+**What is the purpose of a code style linting tool?**
 
 #### Performance Questions:
 
-* What tools would you use to find a performance bug in your code?
-* What are some ways you may improve your website's scrolling performance?
-* Explain the difference between layout, painting and compositing.
+**What tools would you use to find a performance bug in your code?**
+
+**What are some ways you may improve your website's scrolling performance?**
+
+**Explain the difference between layout, painting and compositing.**
 
 #### Network Questions:
 
