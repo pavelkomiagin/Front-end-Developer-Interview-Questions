@@ -354,18 +354,18 @@ There are 4 different types of CSS positioning: Static, Relative, Absolute, and 
 
 **Explain event delegation**
 
-Event delegation allows us to attach a single event listener, to a parent element, that will fire for all children matching a selector, whether those children exist now or are added in the future.the underlying cause is browser's event bubbling.
+Event delegation is when you bind an event listener to a parent (or ancestor) element rather than the element(s) you are particularly interested in. When the event is triggered you can check the event target to make sure it was actually the triggered on the element of interest. In general this would be inefficient as you’re now listening to events on the parent, and have to filter out any that aren’t on the particular element of interest. However, event delegation is particularly useful when you have many siblings (or decedents of the ancestor) that you’re interested in.
+
+For example we have list with three elements. While it would be possible to bind to the individual li elements it would require 3 listeners. Using event delegation it is possible to bind one event listener to the ul element and just check if the event’s target is an li element.
 
 **Explain how `this` works in JavaScript**
 
-The this object is bound at runtime based on the context in which a function is executed:
+`this` is the context the code is running in. However, the context seems to change a lot. So there are some cases:
 
-1. when used inside global functions,this is equal to window in nostrict mode and undefined in strict mode.
-1. whereas this is equal to the object when called as an object method.
-1. as a constructor
-1. call and apply
-1. bound functions
-1. as dom event handler
+1. when used inside global functions, `this` is equal to window in nostrict mode and undefined in strict mode.
+2. When call an object method this refers to object
+1. when use call or apply, this refers to giving object as parameter.
+1. In dom event handler this refers to event object.
 
 **Explain how prototypal inheritance works**
 
@@ -380,7 +380,25 @@ When it comes to inheritance, JavaScript only has one construct: objects. Each o
 The most widely accepted way to tell the parser to expect a function expression is just to wrap in in parens, because in JavaScript, parens can’t contain statements. At this point, when the parser encounters the function keyword, it knows to parse it as a function expression and not a function declaration.
 
 **What's the difference between a variable that is: `null`, `undefined` or undeclared?**
-  * How would you go about checking for any of these states?
+
+1. Variables that are actually 'not defined', i.e. they don't exists as a given name isn't bound in the current lexical environment. Accessing such a variable will throw an error, but using `typeof` won't and will return 'undefined'. In contrast, accessing non-existing properties will not throw an error and return undefined instead (and you may use the `in` operator or the `hasOwnProperty()` method to check if properties actually do exist).
+
+1. Existing variables which have not been assigned a value (which is common because of var hoisting) or which have been explicitly set to undefined. Accessing such a variable will return undefined, typeof will return 'undefined'.
+
+1. Existing variables which have been explicitly set to null. Accessing such a variable will return null, typeof will return 'object'. Note that this is misleading: null is not an object, but a primitive value of type Null (which has the consequence that you can't return null from constructor functions - you have to throw an error instead to denote failure).
+
+*Best practices:*
+
+Use `typeof` to check for undefined, as it will cover the first two cases.
+
+Don't assign `undefined` to properties: Use `delete` to get rid of them instead; note that you cannot delete variables (but also note that globals are actually properties of the global object and thus can be deleted).
+Use `null` to mark the absence of a meaningful value (eg the forward reference of the last node of a linked list) or if you want to clear a variable as a hint to the garbage collector.
+You could go with undefined for 3. as well and never use `null` at all.
+
+**How would you go about checking for any of these states?**
+
+
+
 
 The undefined variable is a declared but has a value of undefined. To use a undeclared variable will cause an error.
 
@@ -390,8 +408,7 @@ Closures are functions that have access to variables from anthor function's scop
 
 **What's a typical use case for anonymous functions?**
 
-1. event handler
-1. IIFE
+Anonymous functions are typically used as callbacks or as IIFE.
 
 **How do you organize your code? (module pattern, classical inheritance?)**
 
@@ -401,8 +418,8 @@ After that, an object literal is returned as the function value. That object lit
 
 **What's the difference between host objects and native objects?**
 
-1. Native objects are those objects supplied by JavaScript. Examples of these are String, Number, Array, Image, Date, Math, etc.
-2. Host objects are objects that are supplied to JavaScript by the browser environment. Examples of these are window, document, forms, etc.
+1. Native objects are those objects supplied by JavaScript. Examples of these are String, Number, Array, Date, Math, etc.
+2. Host objects - everything the environment gives you. For the browser, this includes objects like window. Host objects can differ by environment (or host), so that Node wouldn’t have access to window (which makes sense since there’s no DOM for Node), but could have its own host objects like NodeLists.
 
 **Difference between: `function Person(){}`, `var person = Person()`, and `var person = new Person()`?**
 
@@ -455,17 +472,31 @@ After that, an object literal is returned as the function value. That object lit
     
     Or we can use strict mode and in this case error 'Cannot set property 'name' of undefined"' will appear bacause in strict mode this will not be equals `window` but will be equals `undefined`
 
-
-
 **What's the difference between `.call` and `.apply`?**
 
-These methods both call the function with a specific this value. The *apply()* method accepts two arguments: the value of this and an array of arguments. The *call()* method has the same behavior as apply(), but arguments are passed to it differently. Using call() arguments must be enumerated specifically.
+These methods both call the function with a specific `this` value. The `apply()` method accepts two arguments: the value of this and an array of arguments. The `call()` method has the same behavior as `apply()`, but arguments must be separated by comma.
 
 **Explain `Function.prototype.bind`.**
 
-ECMAScript 5 defines an addition method called 'bind()'. The 'bind()' method create a new function instance whose this value is bound to the value to that was passed into 'bind()'.
+`bind` allows us to set up which object is treated as `this` within the function call. It can be useful when we want to change the context of some function calling.
 
 **When would you use `document.write()`?**
+
+First, what is `document.write()`? 
+`document.write()` writes to the document (or web page). It takes the content you want to write as a parameter. An invocation could look like this:
+`document.write("<h1>JS is awesome!</h1>");`
+
+*Problems with document.write()*:
+
+It replaced the entire content of the document with the parameter of this function. Obviously that’s a problem right there - `document.write()` shouldn’t be used after the page has loaded to change the content as it will overwrite the entire page (probably not what you wanted to happen...).
+
+`document.write()` doesn’t work for XHTML pages.
+
+*Possible situations to use `document.write()`*
+
+It seems that the only “approved” time to use document.write() is for third party code to be included (such as ads or Google Analytics). Since document.write() is always available (mostly) it is a good choice for third party vendors to use it to add their scripts. They don’t know what environment you're using, if jQuery is or isn’t available, or what your onload events are. And with document.write() they don’t have to.
+
+So don’t use it yourself, unless your working for the third party.
 
 **What's the difference between feature detection, feature inference, and using the UA string?**
 
@@ -476,7 +507,13 @@ UA String is User-Agent Detection.
 
 **Explain AJAX in as much detail as possible.**
 
-AJAX is short for Asynchronous Javascript + XML. The technique consisted of making server requests for additional data without reloading web page, as a result we have a better user experience.
+Asynchronous JavaScript and XML. So how does it work?
+
+After loading, the client uses JavaScript to fire off a request to the server and listens to the response asynchronously. The response that comes back can be XML, but is often other formats, most often JSON.
+
+The bit that makes AJAX so powerful is that it can update the page after it has finished loading. Before AJAX any new content required an entire page refresh, even if it was only a small change. This meant that users had to redownload a page for very little updated content. Using AJAX meant that the front end could change without a full page refresh, thus giving a much faster response time.
+
+Origially AJAX mostly returned HTML/XML snipits and the DOM would get updated with this new code when the AJAX returned. Now, however, it’s more common for AJAX to get data and update the DOM as needed rather than doing a swap.
 
 **Explain how JSONP works (and how it's not really AJAX).**
 
@@ -510,8 +547,11 @@ function foo() {
 
 **Describe event bubbling.**
 
-1. Event Flow describes the order in which events are received on the page. An event has three phases of its life cycle: capture, target, and bubbling.
-2. Event Bubbling mean that an event start at the most specific element (the deepest possible point to the document tree) and then flow upward toward the least specific node (the document);
+Event bubbling occurs when a user interacts with a nested element and the event propagates up (“bubbles”) through all of the ancestor elements.
+
+Let's imageine that we have button inside several div elements. When a user clicks the button the event first fires on the button itself, then bubbles up to the parent div, and then up to the ancestor div. The event would continue to bubble up through all the ancestors, until it finally reaches the document.
+
+Often we only want the event to trigger on the element itself, without bubbling. For this we should call `event.stopPropagation();`
 
 **What's the difference between an "attribute" and a "property"?**
 
@@ -529,18 +569,47 @@ However if you subsequently read that property, it will have been normalised to 
 
 **Why is extending built-in JavaScript objects not a good idea?**
 
-Depend on the way of extending.
+We *extend an object* when we add functionality to an object using the `prototype` property. At first glance, this seems like such an awesome feature.
+
+The main argument against doing this is: if, in future, a browser decides to implement its own version of your method, your method might get overridden (silently) and the browser’s implementation (which is probably different from yours) would take over. So not extending in the first place is future proofing your code.
+
+On the another side, if you decide to overwrite the browsers definition, any future developer working on your code won’t know about the change. They'll have a harder time getting up to speed.
+
+Generally it’s safer to move your particular changes into a library (as with underscore.js). That way your particular methods are clearly marked and there’s no chance of conflict.
+
+But...
+
+It might be a good idea to add an extension for functionality that became available in later versions, but isn’t guaranteed to be available in your particular browser. It is called a polyfill.
 
 **Difference between document load event and document ready event?**
 
-1. ready means DOM is ready.
-1. load means the page fully loaded. Includes inner frames, images etc.
+`$(document).ready()` fires when the HTML has finished loading. You can’t interact with the DOM before the HTML has finished loading, so we keep all our JS interactions wrapped up in the ready handler.
+
+`window.onload` fires when all of the content (images, scripts, CSS) has finished loading. This can be really slow, so we try not to keep too much here. But it can be useful if you need to work with images of unknown size.
 
 **What is the difference between `==` and `===`?**
 
-The == operator will compare for equality after doing any necessary type conversions. The === operator will not do the conversion, so if two values are not the same type === will simply return false. It's this case where === will be faster, and may return a different result than ==. In all other cases performance will be the same.
+The `double equals ==` operator will compare for equality after doing any necessary type conversions. The `triple equals ===` operator will not do the conversion, so if two values are not the same type `triple equals ===` will simply return false. It's this case where `triple equals ===` will be faster, and may return a different result than `double equals ==`. In all other cases performance will be the same.
+
+If the two operands are not of the same type, JavaScript converts the operands then applies strict comparison. If either operand is a number or a boolean, the operands are converted to numbers if possible; else if either operand is a string, the other operand is converted to a string if possible. If both operands are objects, then JavaScript compares internal references which are equal when operands refer to the same object in memory.
+
+The best practice is to use `triple equals ===` always.
 
 **Explain the same-origin policy with regards to JavaScript.**
+
+The same-origin policy helps prevent malicious attacks by stopping code from another site executing on your site. An attacks like this is known as a Cross Site Scripting attack.
+
+How does JS decide if it’s a “same” site?
+
+The “origin” is the same if three things are the same: the protocol (http vs. https), the domain (subdomain.yoursite.com vs. yoursite.com vs. google.com), and the port (:80 vs. :4567). If all three of these line up, then JS views the sites as the same, and code is executed. If any of them are different then the code is marked as potentially malicious and is not run.
+
+Hmmm, if I own “subdomain.yoursite.com” and “yoursite.com” I might want to share resources. This same-origin policy could be really annoying!
+
+It’s possible to work around the subdomain problem. You can change the domain of a page, so it can access it’s parent’s resources:
+
+// in the code on subdomain.yoursite.com
+document.domain = "yoursite.com";
+There are a couple other pieces to remember about changing the domain (mostly about the port). You can read about them here.
 
 **Make this work:**
 ```javascript
@@ -552,7 +621,53 @@ function duplicate(collection) {
 
 **Why is it called a Ternary expression, what does the word "Ternary" indicate?**
 
+Let’s answer the second question first: what does the word “ternary” indicate? According to Wikipedia the word “ternary” comes from the n-ary word setup. Other examples of n-ary words are unary and binary. All of these (including ternary) are operands. The prefix section of their name lists how many inputs the operand accepts.
+
+A unary operand accepts one parameter, e.g. -1, where - is the operand, and 1 is the parameter.
+
+A binary operand accepts two parameters, e.g. 2 + 3, where + is the operand, and 2 and 3 are the parameters.
+
+So a ternary operand accepts three parameters.
+
+In programming the ternary operand we use is a rewrite of an if statement. Before we write an actual ternary, we'll just take a quick look at an if statement:
+
+```
+if(conditional) { // one
+    truethy_block // two
+} else {
+    falsey_block // three
+}
+```
+You can see there are three sections to an if statement. Let’s write them as a property ternary expression:
+
+`conditional ? truethy_block : falsey_block`
+All the same code is there, but it’s arranged slightly differently. The ternary’s operand looks like `?:`.
+
+In JS ternarys are often used for assignment:
+
+```
+is_sunny = true;
+var weather = is_sunny ? ’sunny' : 'Cloudy';
+console.log(weather); // logs ’sunny'
+```
+They can also be used for very short conditional statements. But be wary of using them for long or complex logic as they are harder to read than traditional statements.
+
 **What is `"use strict";`? what are the advantages and disadvantages to using it?**
+
+If you put "use strict"; at the top of your code (or function), then the JS is evaluated in strict mode. Strict mode throws more errors and disables some features in an effort to make your code more robust, readable, and accurate.
+
+*Advantages*. 
+Strict mode helps out in a couple ways:
+
+1. It catches some common coding bloopers, throwing exceptions.
+1. It prevents, or throws errors, when relatively “unsafe” actions are taken (such as gaining access to the global object).
+1. It disables features that are confusing or poorly thought out.
+
+*Disadvantages*:
+
+I had a harder time finding why people don’t like strict mode. The best explanation I found was when code mixed strict and “normal” modes. If a developer used a library that was in strict mode, but the developer was used to working in normal mode, they might call some actions on the library that wouldn’t work as expected. Worse, since the developer is in normal mode, they don’t have the advantages of extra errors being thrown, so the error might fail silently.
+
+Also, strict mode stops you from doing certain things. People generally think that you shouldn’t use those things in the first place, but some developers don’t like the constraint and want to use all the features of the language.
 
 **Create a for loop that iterates up to `100` while outputting "fizz" at multiples of `3`, "buzz" at multiples of `5` and "fizzbuzz" at multiples of `3` and `5`**
 
