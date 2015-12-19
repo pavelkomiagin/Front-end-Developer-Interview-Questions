@@ -671,6 +671,20 @@ Also, strict mode stops you from doing certain things. People generally think th
 
 **Create a for loop that iterates up to `100` while outputting "fizz" at multiples of `3`, "buzz" at multiples of `5` and "fizzbuzz" at multiples of `3` and `5`**
 
+```
+for(var i = 1, max = 100; i <= max; i++) {
+    if (i % 15 === 0) {
+        console.log('fizzbuzz');
+        continue;
+    }
+    if (i % 3 === 0)
+        console.log('fizz');
+    else if (i % 5 === 0)
+        console.log('buzz');
+    else console.log(i);
+}
+```
+
 **Why is it, in general, a good idea to leave the global scope of a website as-is and never touch it?**
 
 **Why would you use something like the `load` event? Does this event have disadvantages? Do you know any alternatives, and why would you use those?**
