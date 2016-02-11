@@ -78,16 +78,46 @@ Not all browsers are restricted to just two parallel downloads per hostname. Ope
 
 The optimal number of domains to shard across is 2-4. After 4 domains, response time degrades.
 
-**Name 3 ways to decrease page load (perceived or actual load time).**
+**Lets say your google.com homepage is loading slowly how would you start addressing the problem?**
 
-1. Reduce the number of requests
-1. Minimize HTTP Requests
-1. optimize images
-1. minify css&js file
-1. compress(gzip)
-1. yahoo 14 rules
+1. Optimize Image Size and Format
+The images on your site can take up a lot of bandwidth, which affects the loading time of your page. It is not enough to downsize your website’s images in HTML because that only changes the appearance of the image and not its actual size. Use external picture editor tools to resize the images, such as Photoshop.
+Additionally, use image optimization tools which further compress the image to reduce its size:
 
-Combine and minify all js files in one file. Do the same for styles. Combine images in sprites. Move including JS to the end of <body> tag.
+- JPEG & PNG Stripper
+- Smush.it
+- Online Image Optimizer
+- SuperGIF
+
+For optimized loading time of your page it is ideal to stick to standard image formats such as JPG, PNG and GIF.
+
+2. Avoid Inline JS and CSS files
+It is a good practice to place your website’s JS and CSS in external files. When the page loads the browser caches these files externally and reduces the page load time on subsequent requests. Moreover, having the JS and CSS files externally allows for easier site maintenance.
+
+3. Optimize Caching
+Every time a visitor loads a site, your web page’s image files, CSS and Javascript files load as well, taking up a lot of page load time. When caching is set up correctly, your browser can store these resources or files for subsequent requests. On repeated page loads these files can be retrieved from the cache rather than downloading them all over again from the network. This also reduces bandwidth and hosting costs.
+You can use Expires headers for static components of the site and Cache-Control headers for dynamic ones. Using these headers makes the various components of a site, including images, stylesheets, scripts and flash, cacheable. This in turn minimizes HTTP requests and thus improves the page load time. With the use of Expires headers you can actually control the length of time that components of a web page can be cached, as shown in the example below:
+     Expires: Wed, 20 Apr 2015 20:00:00 GMT
+If your server is Apache you can set the time for cached content by using the ExpiresDefault directive. This sets the expiration date as a certain number of years from the current date:
+     ExpiresDefault “access plus 15 years”
+
+4. Avoid render blocking scripts
+Place javascript files at the end of the body or use the 'async' attribute to load them asynchronously.
+
+5. Avoid Redirects
+Avoiding redirects increases serving speed. Some redirects are unavoidable and need to be in place but you must remember that this requires an additional HTTP which increases the page load time. Check for broken links and fix them immediately.
+
+6. Set up G-Zip Encoding
+Similar to files on your PC that are zipped and compressed to reduce the total size during online file transfers, heavy files on your website can be zipped with something called the G-Zip Compression. This saves bandwidth and download time and reduces your page loading speed. You should configure the server so that it returns zipped content.
+
+7. Reduce HTTP Requests
+Use CSS Sprites to reduce the number of image requests. Combine background images into a single image by using CSS background-image and background-position elements. Combine inline images into your cached stylesheets. Likewise, combine all your javascript files into a single file and all your CSS files as well.
+
+8. Minification of JavaScript and CSS
+Minification is the process of compressing the code by renaming variables to shorter names which helps to reduce its size and the subsequent loading time. We recommend using uglify.js for this.
+
+9. Reduce Cookie Size
+Cookies are used to store data that needs to persist between requests. This data is sent on every request and adds to the load time when it’s big. Hence, by reducing the size of the cookies you reduce the size of the data that is transferred and decrease the page load time. Eliminate unnecessary cookies or reduce the size of the cookies.
 
 **If you jumped on a project and they used tabs and you used spaces, what would you do?**
 
@@ -117,6 +147,14 @@ We should add aria-attributes in out html to help screenreaders detect what part
 CSS animations faster but less controled.
 
 **What does CORS stand for and what issue does it address?**
+
+**On which port HTTP runs?**
+
+By default HTTP uses port 80 and HTTPS uses port 443
+
+**SSL full form**
+
+Secure Sockets Layer
 
 #### HTML Questions:
 
